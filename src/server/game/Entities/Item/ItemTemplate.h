@@ -692,6 +692,7 @@ struct ItemTemplate
     uint32 MinMoneyLoot;
     uint32 MaxMoneyLoot;
     ItemFlagsCustom FlagsCu;
+    float BootsSpeedBonus;
 
     // helpers
     [[nodiscard]] bool HasSignature() const

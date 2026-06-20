@@ -72,6 +72,7 @@
 #include "Vehicle.h"
 #include "World.h"
 #include "WorldPacket.h"
+#include "Log.h"
 #include <algorithm>
 #include <cmath>
 #include <limits>
@@ -11232,7 +11233,7 @@ void Unit::UpdateSpeed(UnitMoveType mtype, bool forced)
         case MOVE_SWIM:
         case MOVE_FLIGHT:
         {
-            // Set creature speed rate
+            // set creature speed rate
             if (IsCreature())
             {
                 if (IsPet() && ToPet()->isControlled() && IsControlledByPlayer())
@@ -11299,6 +11300,20 @@ void Unit::UpdateSpeed(UnitMoveType mtype, bool forced)
         float min_speed = base_speed * (minSpeedMod / 100.0f);
         if (speed < min_speed)
             speed = min_speed;
+    }
+
+    if (IsClientControlled())
+    {
+        Player* player = ToPlayer();
+    
+        LOG_INFO("custom.speed", "Player speed calculation, base speed - {}", speed);
+
+        // add speed modifier from feet equipment to base run speed
+        if (mtype == MOVE_RUN || mtype == MOVE_RUN_BACK || mtype == MOVE_SWIM || mtype == MOVE_SWIM_BACK)
+        {
+            speed += player->GetBootsSpeedBonus();
+            LOG_INFO("custom.speed", "Speed after boots bonus - {}", speed);
+        }
     }
 
     SetSpeed(mtype, speed, forced);

@@ -41,6 +41,7 @@
 #include "TradeData.h"
 #include "Unit.h"
 #include "WorldSession.h"
+#include "Log.h"
 #include <set>
 #include <string>
 #include <vector>
@@ -101,7 +102,7 @@ enum PlayerUnderwaterState
     UNDERWATER_NONE                     = 0x00,
     UNDERWATER_INWATER                  = 0x01,             // terrain type is water and player is afflicted by it
     UNDERWATER_INLAVA                   = 0x02,             // terrain type is lava and player is afflicted by it
-    UNDERWATER_INSLIME                  = 0x04,             // terrain type is lava and player is afflicted by it
+    UNDERWATER_INSLIME                  = 0x04,             // terrain type is slime and player is afflicted by it
     UNDERWATER_INDARKWATER              = 0x08,             // terrain type is dark water and player is afflicted by it
 
     UNDERWATER_EXIST_TIMERS             = 0x10
@@ -3067,6 +3068,19 @@ private:
     bool _expectingChangeTransport;
     uint32 _pendingFlightChangeCounter;
     uint32 _mapChangeOrderCounter;
+
+    float _bootsSpeedBonus = 0.0f;
+
+    void UpdateBootsSpeedBonus();
+    public:
+        float GetBootsSpeedBonus() const
+        {
+            return _bootsSpeedBonus;
+        }
+        void SetBootsSpeedBonus(float value)
+        {
+            _bootsSpeedBonus = value;
+        }
 };
 
 void AddItemsSetItem(Player* player, Item* item);

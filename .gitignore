@@ -114,3 +114,7 @@ local.properties
 #  !modules/yourmodule
 #
 # ==================
+/azeroth-server*/
+/client*/
+/data*/
+/tools*/

@@ -2865,6 +2865,15 @@ Item* Player::EquipItem(uint16 pos, Item* pItem, bool update)
             default:
                 break;
         }
+
+        UpdateBootsSpeedBonus();
+
+        UpdateSpeed(MOVE_RUN, true);
+        UpdateSpeed(MOVE_RUN_BACK, true);
+        UpdateSpeed(MOVE_SWIM, true);
+        UpdateSpeed(MOVE_SWIM_BACK, true);
+
+        LOG_INFO("custom.speed","Item {} equipped with speed bonus {}", pItem->GetTemplate()->Name1, pItem->GetTemplate()->BootsSpeedBonus);
     }
     else
     {
@@ -2901,6 +2910,7 @@ Item* Player::EquipItem(uint16 pos, Item* pItem, bool update)
 
     sScriptMgr->OnPlayerEquip(this, pItem, bag, slot, update);
     UpdateForQuestWorldObjects();
+
     return pItem;
 }
 
@@ -3022,6 +3032,16 @@ void Player::RemoveItem(uint8 bag, uint8 slot, bool update)
                         RecalculateRating(CR_ARMOR_PENETRATION);
                     default:
                         break;
+                }
+
+                if (slot == EQUIPMENT_SLOT_FEET)
+                {
+                    UpdateBootsSpeedBonus();
+
+                    UpdateSpeed(MOVE_RUN, true);
+                    UpdateSpeed(MOVE_RUN_BACK, true);
+                    UpdateSpeed(MOVE_SWIM, true);
+                    UpdateSpeed(MOVE_SWIM_BACK, true);
                 }
             }
 

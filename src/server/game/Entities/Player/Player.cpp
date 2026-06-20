@@ -31,10 +31,10 @@
 #include "BattlegroundMgr.h"
 #include "CellImpl.h"
 #include "CharmInfo.h"
+#include "Chat.h"
 #include "Channel.h"
 #include "CharacterCache.h"
 #include "CharacterDatabaseCleaner.h"
-#include "Chat.h"
 #include "CombatLogPackets.h"
 #include "Common.h"
 #include "ConditionMgr.h"
@@ -16474,4 +16474,28 @@ std::string Player::GetDebugInfo() const
 void Player::SendSystemMessage(std::string_view msg, bool escapeCharacters)
 {
     ChatHandler(GetSession()).SendSysMessage(msg, escapeCharacters);
+}
+
+void Player::UpdateBootsSpeedBonus()
+{
+    LOG_INFO("custom.speed", "Boots speed bonus updated, was - {}", _bootsSpeedBonus);
+
+    _bootsSpeedBonus = 0.0f;
+
+    Item* boots = GetItemByPos(INVENTORY_SLOT_BAG_0,
+        EQUIPMENT_SLOT_FEET);
+
+    if (!boots)
+    {
+        LOG_INFO("custom.speed", "Boots speed bonus updated, now - 0 because no feet equipped");
+        return;
+    }
+    ItemTemplate const* proto = boots->GetTemplate();
+
+    if (!proto)
+        return;
+
+    _bootsSpeedBonus = proto->BootsSpeedBonus;
+
+    LOG_INFO("custom.speed","Boots speed bonus now - {}", _bootsSpeedBonus);
 }
